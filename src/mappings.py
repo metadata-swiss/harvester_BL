@@ -1,3 +1,26 @@
+import os
+
+EU_THEMES = os.environ.get("EU_THEMES", "false").strip().lower() == "true"
+EU_THEME_URI_PREFIX = "http://publications.europa.eu/resource/authority/data-theme/"
+
+# EU theme URI: German labels used by Basel-Landschaft.
+EU_THEME_MAPPING = {
+    EU_THEME_URI_PREFIX + "AGRI": ("Landwirtschaft, Fischerei, Forstwirtschaft und Nahrungsmittel",),
+    EU_THEME_URI_PREFIX + "ECON": ("Wirtschaft und Finanzen",),
+    EU_THEME_URI_PREFIX + "EDUC": ("Bildung, Kultur und Sport",),
+    EU_THEME_URI_PREFIX + "ENER": ("Energie",),
+    EU_THEME_URI_PREFIX + "ENVI": ("Umwelt",),
+    EU_THEME_URI_PREFIX + "GOVE": ("Regierung und öffentlicher Sektor",),
+    EU_THEME_URI_PREFIX + "HEAL": ("Gesundheit",),
+    EU_THEME_URI_PREFIX + "INTR": ("Internationale Themen",),
+    EU_THEME_URI_PREFIX + "JUST": ("Justiz, Rechtssystem und öffentliche Sicherheit",),
+    EU_THEME_URI_PREFIX + "OP_DATPRO": ("Vorläufige Daten",),
+    EU_THEME_URI_PREFIX + "REGI": ("Regionen und Städte",),
+    EU_THEME_URI_PREFIX + "SOCI": ("Bevölkerung und Gesellschaft",),
+    EU_THEME_URI_PREFIX + "TECH": ("Wissenschaft und Technologie",),
+    EU_THEME_URI_PREFIX + "TRAN": ("Verkehr",),
+}
+
 # i14y Code: (dcat-ap.ch URI, EU data-theme URI)
 # TODO Sergiy: revert this map + adapt code that uses it, because we use
 # e.g. "Umwelt" as key to access "113", but we have "113" as key and "Umwelt" as value in the python dict

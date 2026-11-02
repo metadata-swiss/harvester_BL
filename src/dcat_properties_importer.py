@@ -314,14 +314,24 @@ def get_frequency(graph: Graph, subject: URIRef) -> Optional[Dict]:
 
 
 def get_themes(graph: Graph, subject: URIRef, predicate: URIRef) -> List[Dict]:
-    """Retrieves unique theme codes from RDF graph."""
+    """Retrieves unique EU theme URIs or i14y theme codes from RDF graph."""
     unique_codes: Set[str] = set()
     themes: List[Dict] = []
 
     for theme in graph.objects(subject, predicate):
         theme_codes = set()
 
-        if isinstance(theme, Literal):
+        if EU_THEMES:
+            theme_labels = (
+                [str(theme).strip()]
+                if isinstance(theme, Literal)
+                else [str(label).strip() for label in graph.objects(theme, SKOS.prefLabel)]
+            )
+            theme_codes.update(
+                uri for uri, labels in EU_THEME_MAPPING.items()
+                if any(label in labels for label in theme_labels)
+            )
+        elif isinstance(theme, Literal):
             theme_codes.add(str(theme))
         else:
             pref_label = next(graph.objects(theme, SKOS.prefLabel), None)
@@ -332,7 +342,7 @@ def get_themes(graph: Graph, subject: URIRef, predicate: URIRef) -> List[Dict]:
         for code in theme_codes:
             if code not in unique_codes:
                 unique_codes.add(code)
-                themes.append({"code": code})
+                themes.append({"uri" if EU_THEMES else "code": code})
 
     return themes
 
